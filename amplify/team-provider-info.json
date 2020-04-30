@@ -1,0 +1,20 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-proyecto-tit-dev-142020-authRole",
+            "UnauthRoleArn": "arn:aws:iam::824260149345:role/amplify-proyecto-tit-dev-142020-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::824260149345:role/amplify-proyecto-tit-dev-142020-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-proyecto-tit-dev-142020-deployment",
+            "UnauthRoleName": "amplify-proyecto-tit-dev-142020-unauthRole",
+            "StackName": "amplify-proyecto-tit-dev-142020",
+            "StackId": "arn:aws:cloudformation:us-east-1:824260149345:stack/amplify-proyecto-tit-dev-142020/a6ace9c0-8b17-11ea-acc1-0af60b3b604b",
+            "AmplifyAppId": "d1qhh4hsy3o1uz"
+        },
+        "categories": {
+            "auth": {
+                "proyectotit96824535": {}
+            }
+        }
+    }
+}

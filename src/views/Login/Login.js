@@ -34,13 +34,13 @@ export default function LoginPage(props) {
   const { ...rest } = props;
   return (
     <div>
-      <Header
+      {/* <Header
         absolute
         color="transparent"
         brand="Material Kit React"
         rightLinks={<HeaderLinks />}
         {...rest}
-      />
+      /> */}
       <div
         className={classes.pageHeader}
         style={{
@@ -86,10 +86,10 @@ export default function LoginPage(props) {
                       </Button>
                     </div>
                   </CardHeader>
-                  <p className={classes.divider}>Or Be Classical</p>
+                  <p className={classes.divider}>Iniciar Sesión</p>
                   <CardBody>
                     <CustomInput
-                      labelText="First Name..."
+                      labelText="Nombre Usuario"
                       id="first"
                       formControlProps={{
                         fullWidth: true
@@ -119,7 +119,7 @@ export default function LoginPage(props) {
                       }}
                     />
                     <CustomInput
-                      labelText="Password"
+                      labelText="Contraseña"
                       id="pass"
                       formControlProps={{
                         fullWidth: true
@@ -139,7 +139,7 @@ export default function LoginPage(props) {
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
                     <Button simple color="primary" size="lg">
-                      Get started
+                      ENTRAR
                     </Button>
                   </CardFooter>
                 </form>
@@ -147,7 +147,7 @@ export default function LoginPage(props) {
             </GridItem>
           </GridContainer>
         </div>
-        <Footer whiteFont />
+        {/* <Footer whiteFont /> */}
       </div>
     </div>
   );
