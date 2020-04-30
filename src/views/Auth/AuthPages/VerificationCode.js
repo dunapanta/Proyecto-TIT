@@ -5,7 +5,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
-import People from "@material-ui/icons/People";
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
@@ -22,16 +21,35 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg7.jpg";
+import { VpnKey } from "@material-ui/icons";
+
+//Amplify integracion Cognito
+import { Auth } from "aws-amplify";
+
 
 const useStyles = makeStyles(styles);
 
-export default function LoginPage(props) {
+export default function Verify({ inputs, switchPage, handleFormInput}) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
-  const { ...rest } = props;
+  //const { ...rest } = props;
+
+  const handleVerification = event => {
+    event.preventDefault();
+    const { username, code } = inputs;
+
+    Auth.confirmSignUp(username, code)
+    .then( data => { 
+        console.log("Confirmacion Exitosa");
+        console.log(data);
+    })
+    .then(() => switchPage("SignIn"))
+    .catch( err => console.log("Houston problemas: ", err))
+  }
+
   return (
     <div>
       {/* <Header
@@ -55,8 +73,8 @@ export default function LoginPage(props) {
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
                   <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4>Login</h4>
-                    <div className={classes.socialLine}>
+                    <h4>Confirmar Cuenta</h4>
+                  {/*   <div className={classes.socialLine}>
                       <Button
                         justIcon
                         href="#pablo"
@@ -84,62 +102,31 @@ export default function LoginPage(props) {
                       >
                         <i className={"fab fa-google-plus-g"} />
                       </Button>
-                    </div>
+                    </div> */}
                   </CardHeader>
-                  <p className={classes.divider}>Iniciar Sesión</p>
+                  <strong><p className={classes.divider}>Código de Confirmación</p></strong>
                   <CardBody>
+                    
                     <CustomInput
-                      labelText="Nombre Usuario"
-                      id="first"
+                      labelText="Ingresar Código"
+                      id="code"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         type: "text",
+                        onChange: handleFormInput,
                         endAdornment: (
                           <InputAdornment position="end">
-                            <People className={classes.inputIconsColor} />
+                            <VpnKey className={classes.inputIconsColor} />
                           </InputAdornment>
                         )
                       }}
-                    />
-                    <CustomInput
-                      labelText="Email..."
-                      id="email"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <CustomInput
-                      labelText="Contraseña"
-                      id="pass"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "password",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Icon className={classes.inputIconsColor}>
-                              lock_outline
-                            </Icon>
-                          </InputAdornment>
-                        ),
-                        autoComplete: "off"
-                      }}
-                    />
+                    />  
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg">
-                      ENTRAR
+                    <Button simple color="primary" size="lg" onClick={handleVerification}>
+                      CONFIRMAR
                     </Button>
                   </CardFooter>
                 </form>
