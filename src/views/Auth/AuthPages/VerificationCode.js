@@ -22,19 +22,23 @@ import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg7.jpg";
 import { VpnKey } from "@material-ui/icons";
-
 //Amplify integracion Cognito
 import { Auth } from "aws-amplify";
+//Routing
+import { useHistory } from "react-router-dom";
 
 
-const useStyles = makeStyles(styles);
 
-export default function Verify({ inputs, switchPage, handleFormInput}) {
+export default function Verify({ inputs, handleFormInput}) {
+
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
+
+  const useStyles = makeStyles(styles);
   const classes = useStyles();
+  const history = useHistory(); //routing con programacion sin Link
   //const { ...rest } = props;
 
   const handleVerification = event => {
@@ -45,8 +49,8 @@ export default function Verify({ inputs, switchPage, handleFormInput}) {
     .then( data => { 
         console.log("Confirmacion Exitosa");
         console.log(data);
+        history.push("/login")
     })
-    .then(() => switchPage("SignIn"))
     .catch( err => console.log("Houston problemas: ", err))
   }
 

@@ -24,16 +24,20 @@ import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import image from "assets/img/bg7.jpg";
 //Amplify integracion Cognito
 import { Auth } from "aws-amplify";
+//Routing
+import { useHistory } from "react-router-dom";
 
 
-const useStyles = makeStyles(styles);
+export default function LoginPage({ inputs, handleFormInput }) {
 
-export default function LoginPage({ inputs, switchPage, handleFormInput}) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
+  
+  const useStyles = makeStyles(styles);
   const classes = useStyles();
+  const history = useHistory(); //routing con programacion sin Link
   
   const handleSignIn = event => {
     event.preventDefault();
@@ -44,8 +48,8 @@ export default function LoginPage({ inputs, switchPage, handleFormInput}) {
       .then( user => {
         console.log("Bienvenido :)");
         console.log(user);
+        history.push("/home")
       })
-      .then(() => switchPage("Welcome"))
       .catch( err => console.log("Houston problemas: ", err))
   }
   

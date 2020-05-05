@@ -3,6 +3,8 @@ import React from 'react';
 import RegistrationPage from 'views/Auth/AuthPages/Registration';
 import LoginPage from 'views/Auth/AuthPages/Login';
 import Verify from 'views/Auth/AuthPages/VerificationCode';
+//Routing
+import { Switch, Route, Link} from 'react-router-dom';
 
 
  const Authentication = () => {
@@ -26,49 +28,38 @@ import Verify from 'views/Auth/AuthPages/VerificationCode';
         console.log(usuario.username);
     }
 
-    const handlePage = (changePage) =>{
-        setPage(changePage);
-    }
-
-    
-        switch (page){
-            case "SignUp":
-                return(
-                    <RegistrationPage
-                        inputs={usuario}
-                        handleFormInput={handleFormInput}
-                        switchPage={handlePage}  
-                     />
-                );
-            case "SignIn":
-                return(
+    return(
+        <Switch>
+               <Route path="/login">
                     <LoginPage
                         inputs={usuario} 
-                        handleFormInput={handleFormInput}
-                        switchPage={handlePage}   
+                        handleFormInput={handleFormInput}  
                     />
-                );
-            case "Verify":
-                return(
-                    <Verify 
+               </Route>
+               <Route path="/register">
+                    <RegistrationPage
                         inputs={usuario}
-                        handleFormInput={handleFormInput}
-                        switchPage={handlePage}  
+                        handleFormInput={handleFormInput}  
                     />
-                );
-            case "Welcome":
-                return(
-                    <h1>Felicidades Has Iniciado Sesión</h1>
-                );
-            default:
-                return(
-                    <RegistrationPage 
+               </Route>
+               <Route path="/verify">
+                     <Verify 
                         inputs={usuario}
-                        handleFormInput={handleFormInput}
-                        switchPage={handlePage}
+                        handleFormInput={handleFormInput} 
                     />
-                );
-        }
+                    />
+               </Route>
+               <Route path="/home">
+                      <h1>Pin Pan Pun Logeado</h1>
+               </Route>
+               <Route path="/">
+                    <RegistrationPage
+                        inputs={usuario}
+                        handleFormInput={handleFormInput}  
+                    />
+               </Route>
+        </Switch>
+    );
 }
 
 export default Authentication;
