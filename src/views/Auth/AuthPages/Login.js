@@ -126,14 +126,15 @@ export default function LoginPage({ inputs, handleFormInput }) {
                     /> */}
                     
                     <CustomInput
-                      labelText="Email"
-                      id="email"
+                      labelText="Nombre de Usuario"
+                      id="username"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        type: "email",
+                        type: "text",
                         onChange: handleFormInput,
+                        
                         endAdornment: (
                           <InputAdornment position="end">
                             <Email className={classes.inputIconsColor} />

@@ -26,6 +26,7 @@ import { Switch, Route, Link} from 'react-router-dom';
             [e.target.id] : e.target.value
         });
         console.log(usuario.username);
+        console.log(usuario.email);
     }
 
     return(
@@ -33,21 +34,17 @@ import { Switch, Route, Link} from 'react-router-dom';
                <Route path="/login">
                     <LoginPage
                         inputs={usuario} 
-                        handleFormInput={handleFormInput}  
-                    />
+                        handleFormInput={handleFormInput}  />
                </Route>
                <Route path="/register">
                     <RegistrationPage
                         inputs={usuario}
-                        handleFormInput={handleFormInput}  
-                    />
+                        handleFormInput={handleFormInput}  />
                </Route>
                <Route path="/verify">
                      <Verify 
                         inputs={usuario}
-                        handleFormInput={handleFormInput} 
-                    />
-                    />
+                        handleFormInput={handleFormInput} />
                </Route>
                <Route path="/home">
                       <h1>Pin Pan Pun Logeado</h1>
@@ -55,8 +52,7 @@ import { Switch, Route, Link} from 'react-router-dom';
                <Route path="/">
                     <RegistrationPage
                         inputs={usuario}
-                        handleFormInput={handleFormInput}  
-                    />
+                        handleFormInput={handleFormInput}  />
                </Route>
         </Switch>
     );
