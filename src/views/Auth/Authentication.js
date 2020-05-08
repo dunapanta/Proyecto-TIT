@@ -3,6 +3,7 @@ import React from 'react';
 import RegistrationPage from 'views/Auth/AuthPages/Registration';
 import LoginPage from 'views/Auth/AuthPages/Login';
 import Verify from 'views/Auth/AuthPages/VerificationCode';
+import HomePage from 'views/Home/HomePage'
 //Routing
 import { Switch, Route, Link} from 'react-router-dom';
 
@@ -47,7 +48,7 @@ import { Switch, Route, Link} from 'react-router-dom';
                         handleFormInput={handleFormInput} />
                </Route>
                <Route path="/home">
-                      <h1>Pin Pan Pun Logeado</h1>
+                      <HomePage />
                </Route>
                <Route path="/">
                     <RegistrationPage
