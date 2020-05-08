@@ -55,13 +55,13 @@ export default function LoginPage({ inputs, handleFormInput }) {
   
   return (
     <div>
-      {/* <Header
+      <Header
         absolute
         color="transparent"
-        brand="Material Kit React"
+        brand="Proyecto Titulación"
         rightLinks={<HeaderLinks />}
-        {...rest}
-      /> */}
+        //{...rest}
+      />
       <div
         className={classes.pageHeader}
         style={{
