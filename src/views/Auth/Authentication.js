@@ -3,7 +3,8 @@ import React from 'react';
 import RegistrationPage from 'views/Auth/AuthPages/Registration';
 import LoginPage from 'views/Auth/AuthPages/Login';
 import Verify from 'views/Auth/AuthPages/VerificationCode';
-import HomePage from 'views/Home/HomePage'
+import HomePage from 'views/Home/HomePage';
+import UserCurriculum from 'views/UserCurriculum/UserCurriculum';
 //Routing
 import { Switch, Route, Link} from 'react-router-dom';
 
@@ -49,6 +50,9 @@ import { Switch, Route, Link} from 'react-router-dom';
                </Route>
                <Route path="/home">
                       <HomePage />
+               </Route>
+               <Route path="/curriculum">
+                      <UserCurriculum />
                </Route>
                <Route path="/">
                     <RegistrationPage

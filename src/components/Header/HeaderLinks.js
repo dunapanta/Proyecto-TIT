@@ -35,7 +35,7 @@ export default function HeaderLinks(props) {
           >
             <PersonAdd className={classes.icons} /> REGISTRARSE
           </Button>
-          </Link> 
+        </Link> 
       </ListItem>
 
       <ListItem className={classes.listItem}>

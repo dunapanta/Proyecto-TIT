@@ -52,7 +52,7 @@ export default function HeaderLinksHome(props) {
       </ListItem>
 
       <ListItem className={classes.listItem}>
-        <Link to="/login" style={{ color: 'inherit', textDecoration: 'inherit' }}>
+        <Link to="/curriculum" style={{ color: 'inherit', textDecoration: 'inherit' }}>
           <Button
             color="transparent"
             target="_blank"
@@ -60,7 +60,7 @@ export default function HeaderLinksHome(props) {
           >
             <Accessibility  className={classes.icons} /> MI CURRICULUM
           </Button>
-          </Link> 
+        </Link> 
       </ListItem>
 
       <ListItem className={classes.listItem}>
