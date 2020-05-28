@@ -1,10 +1,57 @@
 {
 	"auth": {
-		"proyectotit96824535": {
+		"proyectotitf14e6762": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": [],
 			"customAuth": false
+		}
+	},
+	"storage": {
+		"tesisusuario": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"tesisusuarios": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
+		}
+	},
+	"function": {
+		"tesiscurriculum": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "tesisusuario",
+					"attributes": [
+						"Name",
+						"Arn"
+					],
+					"attributeEnvMap": {
+						"Name": "TABLE_NAME",
+						"Arn": "TABLE_ARN"
+					}
+				}
+			]
+		}
+	},
+	"api": {
+		"tesis": {
+			"service": "API Gateway",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "tesiscurriculum",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
 		}
 	}
 }

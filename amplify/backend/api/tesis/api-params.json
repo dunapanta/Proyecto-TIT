@@ -1,0 +1,41 @@
+{
+    "paths": [
+        {
+            "name": "/users",
+            "lambdaFunction": "tesiscurriculum",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "tesis",
+    "apiName": "tesis",
+    "functionArns": [
+        {
+            "lambdaFunction": "tesiscurriculum"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-proyecto-tit-dev-24156-authRole",
+        "unAuthRoleName": "amplify-proyecto-tit-dev-24156-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "tesiscurriculum",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

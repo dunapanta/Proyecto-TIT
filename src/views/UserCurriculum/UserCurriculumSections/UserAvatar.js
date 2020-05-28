@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 // Componentes
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -7,8 +7,10 @@ import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-
-import avatar from "assets/img/marc.jpg";
+import PhotoIcon from "@material-ui/icons/Photo";
+import avatar from "assets/img/no-image.png";
+// Storage S3
+import { Storage } from 'aws-amplify';
 
 const styles = {
     /* cardCategoryWhite: {
@@ -33,6 +35,33 @@ const useStyles = makeStyles(styles);
 
 export default function UserAvatar() {
     const classes = useStyles();
+
+    const [userImage, setuserImage] = useState({
+      fileUrl:'',
+      file: "",
+      filename: ""
+    })
+
+    const handleChangeImage = e => {
+      const file = e.target.files[0];
+      setuserImage({
+        fileUrl: URL.createObjectURL(file),
+        file,
+        filename: file.name
+      })
+    }
+
+    const saveFile = () => {
+      Storage.put(userImage.filename, userImage.file )
+      .then(() => {
+        console.log('subiendo correctamente')
+        console.log(userImage.fileUrl)
+      })
+      .catch(err => {
+        console.log('error en subida de foto', err)
+      })
+    }
+
     return(
         <Card profile>
             <CardHeader color="warning">
@@ -40,18 +69,37 @@ export default function UserAvatar() {
                 <p className={classes.cardCategoryWhite}>Actualiza tu Fotografía</p>
             </CardHeader>
             <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
+              <a  href="#pablo" onClick={e => e.preventDefault()}>
+                <img src={userImage.fileUrl === "" ? avatar : userImage.fileUrl} alt="..." />
               </a>
             </CardAvatar>
             <CardBody profile>
-              <h4 className={classes.cardTitle}>Da clic para seleccionar una fotografía</h4>
+              <>
+                <input
+                  id="avatar-input"
+                  type="file"
+                  hidden
+                  onChange={handleChangeImage}
+                  accept="image/*"
+                />
+                <label htmlFor="avatar-input">
+                  <Button
+                    color="primary"
+                    component="span"
+                    color="warning"
+                    variant="contained"
+                    onClick={saveFile}
+                  ><PhotoIcon/>
+                    Seleccionar Fotografía
+                  </Button>
+                </label>
+              </>
               <p className={classes.description}>
                 Al actualizar tu fotografía generas confianza 
                 al empleador, al saber quién eres aumenta tu probabilidad de
                 ser CONTRATADO
               </p>
-              <Button color="warning">
+              <Button color="warning" onClick={saveFile}>
                 Subir Fotografía
               </Button>
             </CardBody>
