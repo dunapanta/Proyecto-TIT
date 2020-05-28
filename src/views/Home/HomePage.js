@@ -17,20 +17,15 @@ import HeaderLinksHome from "components/Header/HeaderLinksHome.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
 
 
-export const HomePage = (props) => {
+export const HomePage = () => {
     const useStyles = makeStyles(styles);
     const classes = useStyles();
-    const {checkUser, signOut} = props
+
     return(
         <div>
             <Header
                 brand="Proyecto Titulación"
-                rightLinks={
-                    <HeaderLinksHome
-                        checkUser={checkUser}
-                        signOut={signOut}
-                    />
-                }
+                rightLinks={<HeaderLinksHome />}
                 fixed
                 color="dark"
                 changeColorOnScroll={{

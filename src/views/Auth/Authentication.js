@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 import RegistrationPage from 'views/Auth/AuthPages/Registration';
 import LoginPage from 'views/Auth/AuthPages/Login';
@@ -6,16 +6,12 @@ import Verify from 'views/Auth/AuthPages/VerificationCode';
 import HomePage from 'views/Home/HomePage';
 import UserCurriculum from 'views/UserCurriculum/UserCurriculum';
 //Routing
-import { Switch, Route, useHistory} from 'react-router-dom';
-//Amplify integracion Cognito
-import { Auth } from "aws-amplify";
+import { Switch, Route, Link} from 'react-router-dom';
 
 
  const Authentication = () => {
-     
-    const history = useHistory();
 
-    const [usuario, setUsuario] = useState({
+    const [usuario, setUsuario] = React.useState({
         username: "",
         email: "",
         password: "",
@@ -24,47 +20,15 @@ import { Auth } from "aws-amplify";
         user: null // Este objeto contendra los datos del usuario cuando inicie sesion
     });
 
-    useEffect(() => {
-        Auth.currentAuthenticatedUser({
-            bypassCache: true
-        })
-        .then( data => {
-            let user = {username:data.username, ...data.attributes}
-            console.log(user)
-            if(user.email_verified){
-                setUsuario({
-                    ...usuario,
-                    user
-                })
-            }
-        })
-        .catch(err => console.log(err))
-    },[])
-
-    const checkUser = () => {
-        console.log("INFO de SESSION");
-        Auth.currentAuthenticatedUser()
-        .then(user => console.log({ user }))
-        .catch(err => console.log(err))
-    }
-
-    const signOut = () => {
-        console.log("SALIENDO de SESSION");
-        Auth.signOut()
-        .then(data => {
-            console.log(data)
-            history.push("/login")
-        })
-        .catch(err => console.log(err))
-    }
+    const [page, setPage] = React.useState("SignUp");
 
     const handleFormInput = e => {
         setUsuario({
             ...usuario,
             [e.target.id] : e.target.value
         });
-       /*  console.log(usuario.username);
-        console.log(usuario.email); */
+        console.log(usuario.username);
+        console.log(usuario.email);
     }
 
     return(
@@ -85,10 +49,7 @@ import { Auth } from "aws-amplify";
                         handleFormInput={handleFormInput} />
                </Route>
                <Route path="/home">
-                      <HomePage 
-                        checkUser={checkUser}
-                        signOut={signOut}
-                      />
+                      <HomePage />
                </Route>
                <Route path="/curriculum">
                       <UserCurriculum />
