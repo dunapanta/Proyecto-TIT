@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PhotoIcon from "@material-ui/icons/Photo";
 import avatar from "assets/img/no-image.png";
 // Storage S3
-import { Storage } from 'aws-amplify';
+import { Storage, Auth } from 'aws-amplify';
 
 const styles = {
     /* cardCategoryWhite: {
@@ -32,35 +32,118 @@ const styles = {
   };
 
 const useStyles = makeStyles(styles);
+//Añado
+Storage.configure({  level: "public" });
 
 export default function UserAvatar() {
     const classes = useStyles();
-
-    const [userImage, setuserImage] = useState({
+    const [image, setImage] = useState();
+    const [username, setUserName] = useState({username: ""});
+    /* const [userImage, setuserImage] = useState({
       fileUrl:'',
-      file: "",
-      filename: ""
-    })
+      file: '',
+      filename: ''
+    }) */
+    // Añado
+    let fileInput = React.createRef();
 
-    const handleChangeImage = e => {
+    useEffect(() => {
+      getCurrentUserAsync();
+      console.log("Desde UseEffect",username);
+    }, []);
+
+    const getCurrentUserAsync = async () => {
+       
+      let currentUser= await Auth.currentAuthenticatedUser();
+      let user = { username: currentUser.username }
+      console.log(user);
+      setUserName(
+          username.username = user
+      )
+      console.log("UserName", username.username.username);
+      /* onPageRendered() */
+      getProfilePictureAsync()
+
+      }
+  
+    const onPageRendered = async () => {
+      getProfilePicture();
+    };
+  
+    const getProfilePicture =  () => {
+      Storage.get(`${username.username.username}.png`) 
+        .then(url => {
+          console.log(url)
+          var myRequest = new Request(url);
+          fetch(myRequest).then(function(response) {
+            if (response.status === 200) {
+              setImage(url);
+            }
+          });
+        })
+        .catch(err => console.log(err));
+    };
+
+    const getProfilePictureAsync =  async () => {
+      console.log("Desde Await", username)
+      const storage =  await Storage.get(`${username.username.username}.png`);
+      console.log("Desde Await", username)
+      console.log("Storage",storage)
+      try{
+      setImage(storage);
+      }catch(err){
+        console.log("Error peticion foto", err)
+        setImage(avatar)
+      }
+    }
+
+    const onOpenFileDialog = () => {
+      fileInput.current.click();
+      /* console.log("Desde AVATAR", props); */
+    };
+    const onProcessFile = e => {
+      e.preventDefault();
+      let reader = new FileReader();
+      let file = e.target.files[0];
+      try {
+        reader.readAsDataURL(file);
+      } catch (err) {
+        console.log("Error Fotografia", err);
+      }
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      Storage.put(`${username.username}.png`, file, {
+        contentType: "image/png"
+      })
+        .then(result => console.log(result))
+        .catch(err => console.log(err));
+    };
+
+    /* const handleChangeImage = e => {
       const file = e.target.files[0];
       setuserImage({
         fileUrl: URL.createObjectURL(file),
         file,
         filename: file.name
       })
-    }
+    } */
 
-    const saveFile = () => {
+    /* const saveFile = () => {
       Storage.put(userImage.filename, userImage.file )
       .then(() => {
         console.log('subiendo correctamente')
         console.log(userImage.fileUrl)
+        setuserImage({
+          fileUrl:'',
+          file: '',
+          filename: ''
+        })
       })
       .catch(err => {
         console.log('error en subida de foto', err)
       })
-    }
+    } */
 
     return(
         <Card profile>
@@ -70,7 +153,7 @@ export default function UserAvatar() {
             </CardHeader>
             <CardAvatar profile>
               <a  href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={userImage.fileUrl === "" ? avatar : userImage.fileUrl} alt="..." />
+                <img src={image} onClick={onOpenFileDialog} alt="..." />
               </a>
             </CardAvatar>
             <CardBody profile>
@@ -79,7 +162,8 @@ export default function UserAvatar() {
                   id="avatar-input"
                   type="file"
                   hidden
-                  onChange={handleChangeImage}
+                  ref={fileInput}
+                  onChange={onProcessFile} 
                   accept="image/*"
                 />
                 <label htmlFor="avatar-input">
@@ -88,7 +172,7 @@ export default function UserAvatar() {
                     component="span"
                     color="warning"
                     variant="contained"
-                    onClick={saveFile}
+                    /* onClick={onOpenFileDialog} */
                   ><PhotoIcon/>
                     Seleccionar Fotografía
                   </Button>
@@ -99,9 +183,9 @@ export default function UserAvatar() {
                 al empleador, al saber quién eres aumenta tu probabilidad de
                 ser CONTRATADO
               </p>
-              <Button color="warning" onClick={saveFile}>
+             {/*  <Button color="warning" onClick={onOpenFileDialog}>
                 Subir Fotografía
-              </Button>
+              </Button> */}
             </CardBody>
           </Card>
     );
