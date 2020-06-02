@@ -53,8 +53,9 @@ export default function Categories(props) {
         //Para hacer fetch
      const getUserCurriculumAsync = async () => {
        /*  let path = `/user/${userCurriculum.user.sub}`; */
-       let path = "/user";
-        /* const apiName = "pruebatesis";
+        let path = "/users";
+        const apiName = "tesis";
+        /*
         let myInit = { 
             headers: {}, 
             queryStringParameters: { 
