@@ -5,6 +5,7 @@ import LoginPage from 'views/Auth/AuthPages/Login';
 import Verify from 'views/Auth/AuthPages/VerificationCode';
 import HomePage from 'views/Home/HomePage'
 import UserCurriculum from 'views/UserCurriculum/UserCurriculum';
+import Categories from 'views/Categories/Categories';
 //Amplify integracion Cognito
 import { Auth } from "aws-amplify";
 //Routing
@@ -93,6 +94,13 @@ import { Switch, Route, useHistory} from 'react-router-dom';
                </Route>
                <Route path="/curriculum">
                       <UserCurriculum 
+                      checkUser={checkUser}
+                      signOut={signOut}
+                      usuario={usuario}
+                      />
+               </Route>
+               <Route path="/categories">
+                      <Categories 
                       checkUser={checkUser}
                       signOut={signOut}
                       usuario={usuario}

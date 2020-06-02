@@ -12,7 +12,8 @@ import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
-import {Search, Accessibility, Apps, SettingsApplications, Person, ExitToApp}  from "@material-ui/icons";
+import {Search, Accessibility, Apps, SettingsApplications, 
+  Person, ExitToApp, School, HomeWork, Computer}  from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
@@ -27,17 +28,52 @@ export default function HeaderLinksHome(props) {
   return (
     <List className={classes.list}>
 
-         <ListItem className={classes.listItem}>
-            <Link to="/login" style={{ color: 'inherit', textDecoration: 'inherit' }}>
-            <Button
-                color="transparent"
-                target="_blank"
-                className={classes.navLink}
-            >
-                <Apps  className={classes.icons} /> CATEGORÍAS
-            </Button>
-            </Link> 
-        </ListItem>
+          <ListItem className={classes.listItem}>
+                  <CustomDropdown
+                    noLiPadding
+                    buttonText="Categorías"
+                    buttonProps={{
+                      className: classes.navLink,
+                      color: "transparent"
+                    }}
+                    buttonIcon={Apps}
+                    dropdownList={[
+                      <Link to="/categories" style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                        <Button
+                          color="transparent"
+                          target="_blank"
+                          className={classes.navLink}
+                          onClick={props.checkUser}
+                        >
+                          <School className={classes.icons} /> Educación
+                        </Button>
+                      </Link>,
+
+                      <Link to="/categories" style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                        <Button
+                          color="transparent"
+                          target="_blank"
+                          className={classes.navLink}
+                          onClick={props.checkUser}
+                        >
+                          <HomeWork className={classes.icons} /> Hogar
+                        </Button>
+                    </Link>,
+
+                     <Link to="/categories" style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                      <Button
+                        color="transparent"
+                        target="_blank"
+                        className={classes.navLink}
+                        onClick={props.checkUser}
+                      >
+                        <Computer className={classes.icons} /> Teacnología
+                      </Button>
+                  </Link>
+                      
+                    ]}
+                  />
+          </ListItem>
 
        <ListItem className={classes.listItem}>
         <Link to="/register" style={{ color: 'inherit', textDecoration: 'inherit' }}>
