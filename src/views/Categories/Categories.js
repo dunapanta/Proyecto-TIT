@@ -54,40 +54,17 @@ export default function Categories(props) {
      const getUserCurriculumAsync = async () => {
        /*  let path = `/user/${userCurriculum.user.sub}`; */
        let path = "/user";
-        const apiName = "pruebatesis";
-        let myInit = { // OPTIONAL
-            headers: {}, // OPTIONAL
-            queryStringParameters: {  // OPTIONAL
+        /* const apiName = "pruebatesis";
+        let myInit = { 
+            headers: {}, 
+            queryStringParameters: { 
             },
             response: true,
-        }
-        const response  = await API.get(apiName, path, myInit);
+        } */
+        const response  = await API.get(apiName, path);
         console.log("Respuesta Async Await",response);
     }
 
-   /*  const getUserCurriculumAsyncD = async () => {
-        let path = `/user/${userCurriculum.user.sub}`; 
-        let path = "/user";
-         const apiName = "pruebatesis";
-         const response  = await API.get(apiName, path, function (req, res) {
-            var params = {
-                TableName: tableName,
-                Select: 'ALL_ATTRIBUTES',
-              }; 
-              dynamodb.scan(params, (err, data) => {
-                if (err) {
-                  res.json({ error: 'Could not load items: ' + err.message });
-                }
-                res.json({
-                  data: data.Items.map(item => {
-                    return item;
-                  })
-                });
-              });
-            
-         });
-         console.log("Respuesta Async Await",response);
-     } */
     const CardUser = (
         <Card profile>
             <CardHeader color="info">

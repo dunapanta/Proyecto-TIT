@@ -76,7 +76,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-proyecto-tit-dev-24156-deployment",
-					"S3Key": "amplify-builds/tesiscurriculum-45746d4b4b7031396768-build.zip"
+					"S3Key": "amplify-builds/tesiscurriculum-6b754c4b6261652f6737-build.zip"
 				}
 			}
 		},

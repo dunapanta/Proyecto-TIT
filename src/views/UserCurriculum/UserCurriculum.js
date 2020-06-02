@@ -76,31 +76,21 @@ export default function UserCurriculum(props) {
             [e.target.id] : e.target.value
         });
     }
-    // Mejorar metodo 84 console.log("El id es:", usuario.user.sub); cuando nuevo usuario ingresa curriculum
-    // mejor manejarlo con async await
-    const submitCurriculum = () => {
-        const {usuario} = props;
-        console.log(userCurriculum);
-        console.log("El usuario es:", usuario);
-        /* console.log("El id es:", usuario.user.sub); */
-        console.log("atributos:", userCurriculum);
+    
+    const submitCurriculumAsync = async () => {
+        await getCurrentUserAsync();
         let apiName = "tesis";
         let path = "/users";
         let data = {
             body: {
-                user_id: usuario.user.sub,
+                user_id: userCurriculum.user.sub,
                 ...userCurriculum
             }
         };
-        console.log("La data ecrita:", data);
-        API.post(apiName, path, data)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error.response)
-            })
+        console.log("Curriculum Actualizado")
+        return await API.post(apiName, path, data)
     }
+
 
     const getCurrentUser = () => {
         Auth.currentAuthenticatedUser({bypassCache: true}).then(user => {
@@ -435,7 +425,7 @@ export default function UserCurriculum(props) {
                             <CardFooter>
                                 <Button 
                                     color="warning" 
-                                    onClick={submitCurriculum}>
+                                    onClick={submitCurriculumAsync}>
                                     Actualizar Curriculum
                                 </Button>
                             </CardFooter>
