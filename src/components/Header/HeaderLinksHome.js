@@ -13,7 +13,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
 import {Search, Accessibility, Apps, SettingsApplications, 
-  Person, ExitToApp, School, HomeWork, Computer}  from "@material-ui/icons";
+  Person, ExitToApp, School, HomeWork, Computer, ImportContacts}  from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
@@ -39,6 +39,16 @@ export default function HeaderLinksHome(props) {
                     buttonIcon={Apps}
                     dropdownList={[
                       <Link to="/categories" style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                      <Button
+                        color="transparent"
+                        target="_blank"
+                        className={classes.navLink}
+                        onClick={props.checkUser}
+                      >
+                        <ImportContacts className={classes.icons} /> Todas
+                      </Button>
+                    </Link>,
+                      <Link to="/category-education" style={{ color: 'inherit', textDecoration: 'inherit' }}>
                         <Button
                           color="transparent"
                           target="_blank"
@@ -49,7 +59,7 @@ export default function HeaderLinksHome(props) {
                         </Button>
                       </Link>,
 
-                      <Link to="/categories" style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                      <Link to="/category-home" style={{ color: 'inherit', textDecoration: 'inherit' }}>
                         <Button
                           color="transparent"
                           target="_blank"
@@ -60,14 +70,14 @@ export default function HeaderLinksHome(props) {
                         </Button>
                     </Link>,
 
-                     <Link to="/categories" style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                     <Link to="/category-tecnology" style={{ color: 'inherit', textDecoration: 'inherit' }}>
                       <Button
                         color="transparent"
                         target="_blank"
                         className={classes.navLink}
                         onClick={props.checkUser}
                       >
-                        <Computer className={classes.icons} /> Teacnología
+                        <Computer className={classes.icons} /> Tecnología
                       </Button>
                   </Link>
                       

@@ -8,6 +8,7 @@ import classNames from "classnames";
 import Header from "components/Header/Header.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -26,7 +27,7 @@ import avatar from "assets/img/no-image.png";
 
 const useStyles = makeStyles(styles);
 
-export default function Categories(props) {
+export default function CategoriaEducacion(props) {
     const classes = useStyles();
     const {checkUser, signOut} = props;
     const [listWorkers, setListWorkers] = useState(null);
@@ -63,7 +64,7 @@ export default function Categories(props) {
             },
             response: true,
         }
-        const response  = await API.get(apiName, path, myInit);
+        const response  = await API.get(apiName, path);
         
         setListWorkers(response);
         
@@ -108,7 +109,7 @@ export default function Categories(props) {
                     <div className={classes.brand}>
                         <h1 className={classes.title}>Categorías</h1>
                         <h3 className={classes.subtitle}>
-                            Todas las Categorías
+                            Educación
                         </h3>
                     </div>
                     </GridItem>
@@ -120,10 +121,11 @@ export default function Categories(props) {
                 <div className={classes.container}>
                 <GridContainer>  
                     {listWorkers.map(trabajador => {
+                    if(trabajador.categoria === "Educación"){
                         return (
                         <GridItem key={trabajador.user_id} xs={12} sm={12} md={4}>
                              <Card profile>
-                                <CardHeader color="info">
+                                <CardHeader color="primary">
                         <h3 className={classes.cardTitleWhite}>Trabajo: {trabajador.trabajo}</h3>
                         <p className={classes.cardCategoryWhite}>Categoría: {trabajador.categoria}</p>
                                 </CardHeader>
@@ -138,13 +140,13 @@ export default function Categories(props) {
                                     <p className={classes.description}>
                                         {trabajador.aboutMe}
                                     </p>
-                                    <Button color="info">
+                                    <Button color="primary">
                                         Ver Perfil del Usuario
                                     </Button>
                                     </CardBody>
                             </Card>
                         </GridItem>
-                        )
+                        )}
                         })}
                 </GridContainer>
                 </div>
