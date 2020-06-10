@@ -23,11 +23,14 @@ import Spinner from 'views/Loading/Spinner';
 //AWS
 import Amplify, { Auth, API } from "aws-amplify";
 import avatar from "assets/img/no-image.png";
+//Router
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
 export default function Categories(props) {
     const classes = useStyles();
+    const history = useHistory(); //routing con programacion sin Link
     const {checkUser, signOut} = props;
     const [listWorkers, setListWorkers] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -80,6 +83,13 @@ export default function Categories(props) {
             console.log(err);
             return require(`assets/img/no-image.png`)
         }
+    }
+    const handlePerfil = (id_trabajador, username) => {
+        console.log("Id Usuario", id_trabajador)
+        /* history.push(`/contrato/${id_trabajador}`) */
+        history.push({pathname: "/perfil-trabajador",
+                      state:{ id_trabajador: id_trabajador,
+                              username: username}, })
     }
 
     return (
@@ -138,7 +148,7 @@ export default function Categories(props) {
                                     <p className={classes.description}>
                                         {trabajador.aboutMe}
                                     </p>
-                                    <Button color="info">
+                                    <Button onClick={() => handlePerfil(trabajador.user_id, trabajador.user.username)} color="info">
                                         Ver Perfil del Usuario
                                     </Button>
                                     </CardBody>

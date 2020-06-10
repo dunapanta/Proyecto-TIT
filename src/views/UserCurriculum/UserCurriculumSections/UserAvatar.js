@@ -37,7 +37,7 @@ Storage.configure({  level: "public" });
 
 export default function UserAvatar() {
     const classes = useStyles();
-    const [image, setImage] = useState();
+    const [image, setImage] = useState(avatar);
     const [username, setUserName] = useState({username: ""});
     /* const [userImage, setuserImage] = useState({
       fileUrl:'',
