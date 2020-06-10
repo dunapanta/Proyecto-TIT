@@ -15,6 +15,10 @@
 		"tesisusuarios": {
 			"service": "S3",
 			"providerPlugin": "awscloudformation"
+		},
+		"contratos": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
 		}
 	},
 	"function": {
@@ -36,6 +40,25 @@
 					}
 				}
 			]
+		},
+		"tesiscontrato": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "contratos",
+					"attributes": [
+						"Name",
+						"Arn"
+					],
+					"attributeEnvMap": {
+						"Name": "TABLE_NAME",
+						"Arn": "TABLE_ARN"
+					}
+				}
+			]
 		}
 	},
 	"api": {
@@ -46,6 +69,20 @@
 				{
 					"category": "function",
 					"resourceName": "tesiscurriculum",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
+		},
+		"tesiscontrato": {
+			"service": "API Gateway",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "tesiscontrato",
 					"attributes": [
 						"Name",
 						"Arn"

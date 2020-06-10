@@ -23,12 +23,15 @@ import styles from "assets/jss/material-kit-react/views/components.js";
 import Spinner from 'views/Loading/Spinner';
 //AWS
 import Amplify, { Auth, API } from "aws-amplify";
+//Router
+import { useHistory } from "react-router-dom";
 import avatar from "assets/img/no-image.png";
 
 const useStyles = makeStyles(styles);
 
 export default function CategoriaHogar(props) {
     const classes = useStyles();
+    const history = useHistory();
     const {checkUser, signOut} = props;
     const [listWorkers, setListWorkers] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -81,6 +84,14 @@ export default function CategoriaHogar(props) {
             console.log(err);
             return require(`assets/img/no-image.png`)
         }
+    }
+
+    const handlePerfil = (id_trabajador, username) => {
+        console.log("Id Usuario", id_trabajador)
+        /* history.push(`/contrato/${id_trabajador}`) */
+        history.push({pathname: "/perfil-trabajador",
+                      state:{ id_trabajador: id_trabajador,
+                              username: username}, })
     }
 
     return (
@@ -140,7 +151,7 @@ export default function CategoriaHogar(props) {
                                     <p className={classes.description}>
                                         {trabajador.aboutMe}
                                     </p>
-                                    <Button color="success">
+                                    <Button onClick={() => handlePerfil(trabajador.user_id, trabajador.user.username)} color="success">
                                         Ver Perfil del Usuario
                                     </Button>
                                     </CardBody>

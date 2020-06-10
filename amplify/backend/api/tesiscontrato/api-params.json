@@ -1,0 +1,41 @@
+{
+    "paths": [
+        {
+            "name": "/contratos",
+            "lambdaFunction": "tesiscontrato",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "tesiscontrato",
+    "apiName": "tesiscontrato",
+    "functionArns": [
+        {
+            "lambdaFunction": "tesiscontrato"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-proyecto-tit-dev-24156-authRole",
+        "unAuthRoleName": "amplify-proyecto-tit-dev-24156-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "tesiscontrato",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

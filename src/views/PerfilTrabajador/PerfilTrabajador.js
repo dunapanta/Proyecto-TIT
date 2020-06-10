@@ -28,7 +28,9 @@ import { useLocation } from "react-router-dom";
 import avatar from "assets/img/no-image.png";
 // nodejs library that concatenates classes
 import classNames from "classnames";
-import Amplify, { Storage, API } from "aws-amplify";
+import Amplify, { Auth, Storage, API } from "aws-amplify";
+// Para Id Contrato
+import uuid from 'uuid/v4'
 
 import styles from "assets/jss/material-kit-react/views/componentsSections/javascriptStyles.js";
 
@@ -65,54 +67,89 @@ export default function PerfilTrabajador(props) {
         experiencia: "",
         user:null
     });
+    const [empleador, setEmpleador] = useState({
+        user:null
+    });
     const [loading, setLoading] = useState(true);
-  const [classicModal, setClassicModal] = useState(false);
-  useEffect(() => {
-    console.log(location.pathname); // result: '/secondpage'
-    console.log(location.state.id_trabajador); // result: 'some_value'
-    getUserCurriculumAsync()
-    getProfilePictureAsync()
- }, [location]);
+    const [classicModal, setClassicModal] = useState(false);
 
- const getProfilePictureAsync =  async () => {
-    const storage =  await Storage.get(`${location.state.username}.png`);
-    try{
-    setImage(storage);
-    }catch(err){
-      console.log("Error peticion foto", err)
-      setImage(avatar)
-    }
-  }
+    useEffect(() => {
+        console.log(location.pathname); // result: '/secondpage'
+        console.log(location.state.id_trabajador); // result: 'some_value'
+        getUserCurriculumAsync()
+        getProfilePictureAsync()
+    }, [location]);
 
-  //Para hacer fetch datos trabajador
- const getUserCurriculumAsync = async () => {
-    let path = `/users/${location.state.id_trabajador}`;
-    const apiName = "tesis";
-    
-    const response  = await API.get(apiName, path);
-    console.log("respuestita", response)
-    try{
-    setUserCurriculum({
-        firstName:response[0].firstName,
-        lastName:response[0].lastName,
-        cedula:response[0].cedula,
-        telefono:response[0].telefono,
-        categoria:response[0].categoria,
-        trabajo:response[0].trabajo,
-        tarifa:response[0].tarifa,
-        ciudad:response[0].ciudad,
-        pais:response[0].pais,
-        postalCode:response[0].postalCode,
-        aboutMe:response[0].aboutMe,
-        experiencia:response[0].experiencia,
-        user:response[0].user,
-        })
-        console.log("Final usuario con useState",userCurriculum)}
-        catch(err){
-            console.log("Error que se prodria mejorar mas adelante",err)
+    const getProfilePictureAsync =  async () => {
+        const storage =  await Storage.get(`${location.state.username}.png`);
+        try{
+        setImage(storage);
+        }catch(err){
+        console.log("Error peticion foto", err)
+        setImage(avatar)
         }
-        setLoading(false);
-}
+    }
+
+    //Para hacer fetch datos trabajador
+    const getUserCurriculumAsync = async () => {
+        let path = `/users/${location.state.id_trabajador}`;
+        const apiName = "tesis";
+        
+        const response  = await API.get(apiName, path);
+        console.log("respuestita", response)
+        try{
+        setUserCurriculum({
+            firstName:response[0].firstName,
+            lastName:response[0].lastName,
+            cedula:response[0].cedula,
+            telefono:response[0].telefono,
+            categoria:response[0].categoria,
+            trabajo:response[0].trabajo,
+            tarifa:response[0].tarifa,
+            ciudad:response[0].ciudad,
+            pais:response[0].pais,
+            postalCode:response[0].postalCode,
+            aboutMe:response[0].aboutMe,
+            experiencia:response[0].experiencia,
+            user:response[0].user,
+            })
+            console.log("Final usuario con useState",userCurriculum)}
+            catch(err){
+                console.log("Error que se prodria mejorar mas adelante",err)
+            }
+            setLoading(false);
+    }
+
+    const submitCurriculumAsync = async () => {
+        await getCurrentUserAsync()
+        let apiName = "tesiscontrato";
+        let path = "/contratos";
+        let data = {
+            body: {
+                id_contrato: uuid(),
+                id_empleador: empleador.user.sub,
+                id_trabajador: userCurriculum.user.sub,
+                username_trabajador: userCurriculum.user.username,
+                calificacion: "",
+                review_empleador: ""
+            }
+        };
+        console.log("Contrato a dynamodb")
+        await API.post(apiName, path, data)
+        console.log("Enviado")
+        setClassicModal(true)
+    }
+    const getCurrentUserAsync = async () => {
+       
+        let currentUser= await Auth.currentAuthenticatedUser();
+        console.log("Todo",currentUser)
+        let user = { username: currentUser.username, ...currentUser.attributes }
+        setEmpleador(
+            empleador.user = user
+        )
+        console.log("Desde useState trabajador: ", userCurriculum);
+    }
+
   return (
       <>
             <Header
@@ -136,12 +173,9 @@ export default function PerfilTrabajador(props) {
                 <div className={classes.container}>
                 <GridContainer>
                     <GridItem>
-                   {/*  <div className={classes.brand}>
-                        <h1 className={classes.title}>Perfil</h1>
-                        <h3 className={classes.subtitle}>
-                            Aquí puedes contratar
-                        </h3>
-                    </div> */}
+                        <div style={ {display: "block", color: "rgb(107, 144, 106)", fontSize: "35px", textAlign: "center", padding:"6px"}}>
+                            <h2>Perfil Trabajador</h2>
+                        </div>
                     </GridItem>
                 </GridContainer>
                 </div>
@@ -169,7 +203,7 @@ export default function PerfilTrabajador(props) {
                     <GridItem xs={12} sm={12} md={6} lg={4}>
                             <Button 
                                 size="lg" 
-                                onClick={() => setClassicModal(true)} 
+                                onClick={submitCurriculumAsync} 
                                 color="success">
                                 <Work className={classes.icon} />
                                 Contratar Trabajador
