@@ -121,6 +121,13 @@ export default function PerfilTrabajador(props) {
     }
 
     const submitCurriculumAsync = async () => {
+        let  fecha = new Date();
+        let anio = fecha.getFullYear();
+        let mes = fecha.getMonth() +1;
+        let dia = fecha.getDate();
+        let hora = fecha.getHours();
+        let minutos = fecha.getMinutes();
+        let segundos = fecha.getSeconds();
         await getCurrentUserAsync()
         let apiName = "tesiscontrato";
         let path = "/contratos";
@@ -130,6 +137,7 @@ export default function PerfilTrabajador(props) {
                 id_empleador: empleador.user.sub,
                 id_trabajador: userCurriculum.user.sub,
                 username_trabajador: userCurriculum.user.username,
+                fecha_contratacion:`${dia}/${mes}/${anio} ${hora}:${minutos}:${segundos}`,
                 calificacion: "",
                 review_empleador: ""
             }
