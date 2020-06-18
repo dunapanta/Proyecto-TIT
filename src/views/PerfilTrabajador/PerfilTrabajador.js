@@ -17,8 +17,13 @@ import Header from "components/Header/Header.js";
 import Parallax from "components/Parallax/Parallax.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
+import Card from "components/Card/Card.js";
+import CardHeader from "components/Card/CardHeader.js";
+import CardBody from "components/Card/CardBody.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Footer from "components/Footer/Footer.js";
+import ReactStars from "react-rating-stars-component";
 // sections for this page
 import HeaderLinksHome from "components/Header/HeaderLinksHome.js";
 import Spinner from 'views/Loading/Spinner';
@@ -72,10 +77,20 @@ export default function PerfilTrabajador(props) {
     });
     const [loading, setLoading] = useState(true);
     const [classicModal, setClassicModal] = useState(false);
+    const [contratado, setContratado] = useState(false);
+    const [datosContrato, setDatosContrato] = useState({});
+    const [datosCalificacion, setDatosCalificacion] = useState({
+        calificacion: 0,
+        review_empleador: ""
+    })
 
     useEffect(() => {
         console.log(location.pathname); // result: '/secondpage'
         console.log(location.state.id_trabajador); // result: 'some_value'
+        console.log(location.state.id_contrato)
+        if(location.state.id_contrato){
+            calificarDesdeLista()
+        }
         getUserCurriculumAsync()
         getProfilePictureAsync()
     }, [location]);
@@ -146,7 +161,9 @@ export default function PerfilTrabajador(props) {
         await API.post(apiName, path, data)
         console.log("Enviado")
         setClassicModal(true)
+        setContratado(true)
     }
+
     const getCurrentUserAsync = async () => {
        
         let currentUser= await Auth.currentAuthenticatedUser();
@@ -156,6 +173,38 @@ export default function PerfilTrabajador(props) {
             empleador.user = user
         )
         console.log("Desde useState trabajador: ", userCurriculum);
+    }
+
+    const submitCalificacion = async () => {
+        let apiName = "tesiscontrato";
+        let path = "/contratos";
+        let data = {...datosContrato};
+        data.body.calificacion = datosCalificacion.calificacion;
+        data.body.review_empleador = datosCalificacion.review_empleador;
+        console.log("USESTATE",datosContrato)
+        return await API.put(apiName, path, data);
+    }
+
+    const ratingChanged = (newRating) => {
+        console.log(newRating);
+        setDatosCalificacion({...datosCalificacion, calificacion:newRating})
+        console.log(datosCalificacion)
+    };
+
+    const reviewChanged = (e) => {
+        setDatosCalificacion({...datosCalificacion, review_empleador: e.target.value})
+        console.log(datosCalificacion)
+    };
+
+    const calificarDesdeLista = async () => {
+        let path = `/contratos/${location.state.id_contrato}`;
+        const apiName = "tesiscontrato";
+        
+        const response  = await API.get(apiName, path);
+        setDatosContrato({body: response[0]})
+        console.log("Respuesta",response)
+        console.log("Datos Contrato",datosContrato)
+        setContratado(true)
     }
 
   return (
@@ -211,7 +260,8 @@ export default function PerfilTrabajador(props) {
                     <GridItem xs={12} sm={12} md={6} lg={4}>
                             <Button 
                                 size="lg" 
-                                onClick={submitCurriculumAsync} 
+                                onClick={submitCurriculumAsync}
+                                disabled={contratado} 
                                 color="success">
                                 <Work className={classes.icon} />
                                 Contratar Trabajador
@@ -292,6 +342,69 @@ export default function PerfilTrabajador(props) {
                 </GridContainer>
             </div>
         </div>
+
+        {contratado ? 
+            <Card style={{padding: "40px 0px"}}>
+                <CardHeader color="success">
+                        <h3 className={classes.cardTitleWhite}>Cómo Te Fue Con La Contratación?</h3>
+                        <p className={classes.cardCategoryWhite}>Danos a Conocer tu Expeiencia con el Trabajador que Contrataste</p>
+                </CardHeader>
+            <CardBody>
+                <div style={ {display: "block", color: "#3C4858", fontSize: "16px", textAlign: "center", padding:"6px"}}>
+                    <h4>En Esta Sección Puedes Compartirnos tu Experiencia con la Contratación que Realizaste</h4>
+                </div>
+            <GridContainer>
+                <GridItem xs={12} sm={12} md={6}>
+                    <Card>
+                        <CardHeader color="success">
+                            <h3 className={classes.cardTitleWhite}>Califica Al Trabajador</h3>
+                            <p className={classes.cardCategoryWhite}>Puntua de Una a Cinco Estrellas el Desempeño del Trabajador</p>
+                        </CardHeader>
+                        <CardBody>
+                            <ReactStars
+                                size={80}
+                                count={5}
+                                value={datosCalificacion.calificacion}
+                                onChange={ratingChanged}
+                                color2={"#ffd700"}
+                            />
+                        </CardBody>
+                    </Card>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                <Card>
+                        <CardHeader color="success">
+                            <h3 className={classes.cardTitleWhite}>Escribe Tu Review</h3>
+                            <p className={classes.cardCategoryWhite}>Tu Review es Importante para el Trabajador y para Futuros Empleadores </p>
+                        </CardHeader>
+                        <CardBody>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={12}>
+                                    <CustomInput
+                                        labelText="Comentanos cómo te fue con el Trabajador"
+                                        id="experiencia"
+                                        formControlProps={{
+                                        fullWidth: true
+                                        }}
+                                        inputProps={{
+                                        type: "text",
+                                        onChange: reviewChanged,
+                                        /* value: userCurriculum.experiencia, */
+                                        multiline: true,
+                                        rows: 4
+                                        }}
+                                    />
+                                </GridItem>
+                            </GridContainer>
+                        </CardBody>
+                    </Card>
+                    </GridItem>
+                    <Button onClick={submitCalificacion} style={{alignItems: 'center'}} color="success">Enviar Calificación</Button>
+            </GridContainer>
+            </CardBody>
+           </Card>
+            : null}
+
         </div>}
         <Footer />
     </>

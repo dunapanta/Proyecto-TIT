@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
+// @material-ui/icons
+import Create from "@material-ui/icons/Create";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // core components
@@ -12,10 +13,10 @@ import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import Parallax from "components/Parallax/Parallax.js";
 import Footer from "components/Footer/Footer.js";
 import Table from "views/ListaContratos/Table/Table.js";
+import ReactStars from "react-rating-stars-component";
 // sections for this page
 import HeaderLinksHome from "components/Header/HeaderLinksHome.js";
 
@@ -23,6 +24,8 @@ import styles from "assets/jss/material-kit-react/views/components.js";
 import Spinner from 'views/Loading/Spinner';
 //AWS
 import Amplify, { Auth, API } from "aws-amplify";
+//React Router
+import { useHistory } from "react-router-dom"
 
 const styles2 = {
     cardCategoryWhite: {
@@ -58,6 +61,8 @@ const useStyles = makeStyles(styles, styles2);
 export default function ListaContratos(props) {
     const classes = useStyles();//routing con programacion sin Link
     const {checkUser, signOut} = props;
+    const history = useHistory();
+    const [datosContratados, setDatosContratados] = useState([])
     const [listaRenderizar, setListaRenderizar] = useState([]);
     const [calificacion, setCalificacion] = useState();
     const [loading, setLoading] = useState(false);
@@ -101,15 +106,24 @@ export default function ListaContratos(props) {
             datosTrabajador.forEach( (objetoTrab) => {
                 objetoTrab.id_contrato = contratado.id_contrato
                 objetoTrab.fecha_contratacion = contratado.fecha_contratacion
+                objetoTrab.calificacion = contratado.calificacion
             })
             contratados.push(datosTrabajador);
             console.log("Datos TRABAJADOR CONTRATADO", contratados)
         }
 
+        setDatosContratados(contratados)
+
         let listaAux = []
         contratados.forEach( async (trab) => {
             trab.forEach( async (traba) => {
-                listaAux.push([`${traba.firstName} ${traba.lastName}`, traba.categoria, traba.trabajo, traba.fecha_contratacion])
+                listaAux.push([`${traba.firstName} ${traba.lastName}`, traba.categoria, traba.trabajo, traba.fecha_contratacion, traba.calificacion ? <ReactStars
+                size={25}
+                count={5}
+                value={+traba.calificacion}
+               /*  onChange={ratingChanged} */
+                color2={"#ffd700"}
+            /> : <Button color="info" onClick={() => handlePerfil(traba.user_id, traba.user.username, traba.id_contrato)}><Create className={classes.icon} />  Calificar</Button>])
             } ) 
         } )
 
@@ -121,6 +135,14 @@ export default function ListaContratos(props) {
         
     }
   
+    const handlePerfil = (id_trabajador, username, id_contrato) => {
+        console.log("Id Usuario", id_trabajador)
+        /* history.push(`/contrato/${id_trabajador}`) */
+        history.push({pathname: "/perfil-trabajador",
+                        state:{ id_trabajador: id_trabajador,
+                                username: username,
+                                id_contrato: id_contrato}, })
+        }
 
     return (
         <div>
@@ -145,19 +167,14 @@ export default function ListaContratos(props) {
                 <div className={classes.container}>
                 <GridContainer>
                     <GridItem>
-                    <div className={classes.brand}>
-                        <h1 className={classes.title}>Lista Contratos</h1>
-                        <h3 className={classes.subtitle}>
-                            Lista de Trabajadores Contratados
-                        </h3>
-                    </div>
+                        <div style={ {display: "block", color: "#00e3ff", fontSize: "35px", textAlign: "center", padding:"6px"}}>
+                            <h2>Lista de Trabajadores Contratados</h2>
+                        </div>
                     </GridItem>
                 </GridContainer>
                 </div>
             </Parallax>
-           {/*  <Button onClick={getUserAsync}>Obtener Datos API</Button>
-            <Button onClick={listaContratos}>Contratos</Button>
-            <Button onClick={contratosEmpleador}>Contratos Empleador</Button> */}
+           
             {loading ? <Spinner/> : <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
@@ -169,9 +186,8 @@ export default function ListaContratos(props) {
                     <CardBody>
                         <Table
                         tableHeaderColor="success"
-                        tableHead={["Trabajador", "Categoría", "Trabajo", "Fecha Contrato"]}
+                        tableHead={["Trabajador", "Categoría", "Trabajo", "Fecha Contrato", "Calificacion"]}
                         tableData={listaRenderizar}
-                        calificacion={calificacion}
                         />
                     </CardBody>
                     </Card>

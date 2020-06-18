@@ -15,7 +15,7 @@ const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor, calificacion } = props;
+  const { tableHead, tableData, tableHeaderColor} = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -38,7 +38,6 @@ export default function CustomTable(props) {
         <TableBody>
           {tableData.map((prop, key) => {
             return (
-              <>
               <TableRow key={key} className={classes.tableBodyRow}>
                 {prop.map((prop, key) => {
                   return (
@@ -48,8 +47,6 @@ export default function CustomTable(props) {
                   );
                 })}
               </TableRow>
-              {calificacion ? <TableRow><Button color="success" size="sm">Calificar Trabajador</Button></TableRow> : null}
-              </>
             );
           })}
         </TableBody>

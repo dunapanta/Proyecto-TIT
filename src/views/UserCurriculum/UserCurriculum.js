@@ -91,16 +91,6 @@ export default function UserCurriculum(props) {
         return await API.post(apiName, path, data)
     }
 
-
-    const getCurrentUser = () => {
-        Auth.currentAuthenticatedUser({bypassCache: true}).then(user => {
-            setUserCurriculum(userCurriculum.user = user)
-            console.log("getUser",userCurriculum.user )
-            console.log("getUser",userCurriculum.user.attributes.sub )
-        })
-       /*  getUserCurriculum(); */
-    }
-
     const getCurrentUserAsync = async () => {
        
         let currentUser= await Auth.currentAuthenticatedUser();
@@ -118,39 +108,6 @@ export default function UserCurriculum(props) {
         getUserCurriculumAsync();
         // paso a false loading
         
-    }
-
-    //Para hacer fetch
-    const getUserCurriculum = () => {
-        /* const {usuario} = props; */
-        
-        let path = `/users/23760e28-dbbd-43a7-8b4c-c9fd0c9e069d`;
-        const apiName = "tesis";
-        API.get(apiName, path)
-        .then(response => {
-            console.log("Con User ID",response[0]);
-            console.log("Pin pan p",userCurriculum.user);
-
-            setUserCurriculum(
-                userCurriculum.firstName=response[0].firstName,
-                //userCurriculum.loading= false,
-               /*  userCurriculum.lastName=response[0].lastName,
-                userCurriculum.cedula=response[0].cedula,
-                userCurriculum.telefono=response[0].telefono,
-                userCurriculum.categoria=response[0].categoria,
-                userCurriculum.trabajo=response[0].trabajo,
-                userCurriculum.tarifa=response[0].tarifa,
-                userCurriculum.ciudad=response[0].ciudad,
-                userCurriculum.pais=response[0].pais,
-                userCurriculum.postalCode=response[0].postalCode,
-                userCurriculum.aboutMe=response[0].aboutMe,
-                userCurriculum.experienciaresponse[0].experiencia, */
-                )
-            console.log(userCurriculum);
-        })
-        .catch(error => {
-            console.log(error)
-        })
     }
 
      //Para hacer fetch
@@ -181,8 +138,6 @@ export default function UserCurriculum(props) {
                 console.log("Error que se prodria mejorar mas adelante sin try catch",err)
             }
             setLoading(false);
-        
-        
     }
 
     const classes = useStyles();
