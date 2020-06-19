@@ -157,6 +157,7 @@ export default function PerfilTrabajador(props) {
                 review_empleador: ""
             }
         };
+        setDatosContrato(data)
         console.log("Contrato a dynamodb")
         await API.post(apiName, path, data)
         console.log("Enviado")
